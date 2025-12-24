@@ -8,10 +8,7 @@ author_info = "made by chanvel"
 # 1. 生成根目录的总 README.md
 with open('README.md', 'w', encoding='utf-8') as f:
     # 标题下换行，并使用 <font color="#888"> 设置为浅灰色
-    f.write(f"# 技术博客总入口\n")
     f.write(f"<sub><font color='#888'>{author_info} | 最近更新: {current_date}</font></sub>\n\n")
-    
-    f.write("## 学习分类\n")
     f.write("- [🐍 Python 语言学习](./python/README.md)\n")
 
 # 2. 生成子目录的内容
