@@ -1,10 +1,6 @@
 # 🤔 Python 语言
 <sub><font color='#888'>made by chanvel</font></sub>
 
-这里记录了从 .py 文件中自动提取的源码和案例。
-
----
-
 ### 📄 文件名: hello_world.py
 
 ```python
