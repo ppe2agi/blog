@@ -4,6 +4,7 @@ from datetime import datetime
 # 获取当前日期
 current_date = datetime.now().strftime('%Y-%m-%d')
 author_info = "made by chanvel"
+project_title = "言出法随 除减加乘 知行合一"  # 定义项目标题
 
 # 1. 生成根目录的总 README.md
 with open('README.md', 'w', encoding='utf-8') as f:
