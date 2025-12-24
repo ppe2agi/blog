@@ -4,8 +4,6 @@ from datetime import datetime
 # === 配置信息 ===
 current_date = datetime.now().strftime('%Y-%m-%d')
 author_info = "made by chanvel"
-# 你设定的新标题
-project_title = "知行合一" 
 # 你的自定义域名
 domain_name = "blog.ppe2agi.qzz.io"
 
@@ -45,5 +43,4 @@ with open('python/README.md', 'w', encoding='utf-8') as f:
 
 print(f"✅ 执行完成：")
 print(f"   - 已确保 CNAME 存在 ({domain_name})")
-print(f"   - 已更新主页标题为：{project_title}")
 print(f"   - 更新日期：{current_date}")
