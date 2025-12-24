@@ -12,3 +12,4 @@ b=a
 print(b)
 #继续测试
 print(a+b)
+input()
