@@ -65,7 +65,6 @@ def build():
     
     # 定义通用的页脚 (修正了 \n 换行符)
     common_footer = [
-        "\n---", 
         f"更新时间: {NOW}  ",
         "made by **chanvel**"
     ]
@@ -74,7 +73,6 @@ def build():
     markdown_segments = [
         f"# 🤔 Python 源码汇总\n",
         f"[⬅️ 返回首页](../README.md)\n",
-        "\n---\n"
     ]
 
     for py in py_files:
@@ -86,8 +84,6 @@ def build():
             file_content = process_py_content(py)
             markdown_segments.append(file_content)
             
-            # 每个文件处理完后加一条分割线
-            markdown_segments.append("\n---\n")
             print(f"✅ 已处理: {py.name}")
         except Exception as e:
             print(f"❌ 读取 {py.name} 失败: {e}")
@@ -98,7 +94,6 @@ def build():
 
     # --- 2. 生成根目录 README.md (项目入口) ---
     root_content = [
-        "# 🚀 代码库主页\n",
         f"- [📁 Python 源码详情](./python/README.md) ({len(py_files)} 个案例文件)\n",
     ] + common_footer
     
