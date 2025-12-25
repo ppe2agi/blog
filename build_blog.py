@@ -19,7 +19,7 @@ def build():
     
     # 1. 生成 python/README.md (源码详情页)
     markdown_segments = [
-        f"# 🐍 Python 源码汇总\n",
+        f"# 🤔 Python 源码汇总\n",
         f"> 更新时间: {NOW}  ",
         f"[⬅️ 返回首页](../README.md)\n",
         "---\n"
@@ -46,9 +46,7 @@ def build():
 
     # 2. 生成根目录 README.md (项目入口)
     root_content = [
-        "# 🚀 代码库项目索引\n",
         f"最后同步日期: `{NOW}`\n",
-        "## 目录导航",
         f"- [📁 Python 源码详情](./python/README.md) ({len(py_files)} 个案例文件)\n",
         "---",
         "Tip: 在 VS Code 中预览此文档可按 `Ctrl+Shift+V`。"
