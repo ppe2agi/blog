@@ -39,5 +39,13 @@
 ```
 </div>
 
-> 更新时间: 2025-12-25 11:03  
+## 📄 2hello_world.py
+<div style="white-space: pre-wrap; word-wrap: break-word;">
+
+```python
+print('hello_world')
+```
+</div>
+
+> 更新时间: 2025-12-25 11:07  
 made by **chanvel**
