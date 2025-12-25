@@ -56,7 +56,7 @@ def build():
     # --- 1. 生成子目录 python/README.md ---
     # 删除了所有标题行，正文直接从返回链接开始
     sub_md = [
-        f"[⬅️ 返回首页](../README.md)\n",
+        f"[⬅️ 源代码汇总](../README.md)\n",
     ]
 
     for py in py_files:
@@ -75,7 +75,7 @@ def build():
     # 核心修改：首页完全不写任何标题 (# 或 ##)
     root_md = [
         # 这里直接开始写内容
-        f"- [📁 点击查看 Python 源代码案例](./python/README.md) ({len(py_files)} 个案例文件)\n",
+        f"- [📁 Python 源代码](./python/README.md) ({len(py_files)} 个案例)\n",
     ] + common_footer
     
     ROOT_MD.write_text('\n'.join(root_md), encoding='utf-8')

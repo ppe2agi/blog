@@ -1,0 +1,28 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+// 调整顶部横幅的高度（原高度通常较大）
+.page-header {
+  padding: 2rem 4rem; // 第一个数值控制上下间距，你可以根据需要调小（如 1.5rem）
+  
+  @include mq(640px) {
+    padding: 3rem 4rem; // 针对中等屏幕的调整
+  }
+  
+  @include mq(400px) {
+    padding: 1.5rem 1rem; // 针对小屏幕（手机）的调整
+  }
+}
+
+// 如果你觉得标题文字也太大了，可以顺便调小
+.project-name {
+  font-size: 2.5rem; // 原尺寸通常更大
+  margin-top: 0;
+}
+
+.project-tagline {
+  font-size: 1rem; // 描述文字的大小
+  margin-bottom: 0;
+}
