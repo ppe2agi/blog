@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime
 
 # --- 配置 ---
+# 修改：更新时间格式与新的页脚样式结合
 NOW = datetime.now().strftime('%Y-%m-%d %H:%M')
 SRC, ROOT_MD, SRC_MD = Path('python'), Path('README.md'), Path('python/README.md')
 CN_MAP = {c: i for i, c in enumerate('一二三四五六七八九十', 1)}
@@ -38,20 +39,20 @@ def process_py(p):
 def build():
     SRC.mkdir(exist_ok=True)
     py_files = sorted(SRC.glob('*.py'), key=get_sort_key)
-    footer = [f"\n\n更新时间: {NOW}", "made by **chanvel**"]
+    
+    # 修改：页脚样式改为 made by chanvel & 时间
+    footer = [f"\n\nmade by chanvel & {NOW}"]
     
     # 1. 详情页 (python/README.md)
-    # 修改：返回按钮改为 [源代码汇总]，删除标题
     sub_body = [f"[源代码汇总](../README.md)\n"]
     for py in py_files:
         sub_body.extend([f"### {py.stem}", process_py(py)])
     SRC_MD.write_text("\n".join(sub_body + footer), encoding='utf-8')
 
     # 2. 主页 (README.md)
-    # 修改：入口文本改为 [Python源代码]，删除标题
     root_body = [f"- [Python源代码](./python/README.md)"]
     ROOT_MD.write_text("\n".join(root_body + footer), encoding='utf-8')
 
 if __name__ == "__main__":
     build()
-    print(f"✨ 构建成功！文本已按需精简。")
+    print(f"✨ 构建成功！页脚已更新为: made by chanvel & {NOW}")
