@@ -1,4 +1,4 @@
-#!/usr/bin python
+# #!/usr/bin python 
 # #!：是一个特殊符号组合，告诉 Linux 内核，接下来的路径是执行本文件的解释器。
 # /usr/bin/：这是存放系统命令的目录。
 # python：这是你指定的解释器名称。
