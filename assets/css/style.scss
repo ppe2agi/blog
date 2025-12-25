@@ -2,35 +2,43 @@
 ---
 @import "{{ site.theme }}";
 
-// 1. 缩小顶部横幅高度并强制内容居中
+// 1. 核心修复：强制所有页面显示滚动条占位符，消除页面抖动/偏移
+html {
+  overflow-y: scroll;
+}
+
+// 2. 增强 Header 居中稳定性
 .page-header {
   padding: 1.5rem 2rem !important;
-  text-align: center; // 确保内部所有文字水平居中
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  // 消除潜在的宽度溢出
+  box-sizing: border-box; 
 }
 
-// 2. 修复标题偏移
+// 3. 强制标题和描述绝对居中
+.project-name, .project-tagline {
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+  max-width: none !important; // 移除 Cayman 可能存在的最大宽度限制
+}
+
 .project-name {
   font-size: 2.2rem !important;
-  margin: 0 !important;      // 消除可能导致偏移的边距
-  padding: 0 !important;
-  width: 100%;               // 确保占据全宽以实现真正的居中
-  text-align: center;
+  margin-bottom: 0.2rem !important;
 }
 
-// 3. 修复描述文字偏移
 .project-tagline {
   font-size: 0.9rem !important;
-  margin: 0.2rem 0 0 0 !important;
   opacity: 0.8;
-  width: 100%;
-  text-align: center;
 }
 
-// 4. 让正文横线变细
+// 4. 正文细线样式
 hr {
   height: 1px !important;
   border: none !important;
