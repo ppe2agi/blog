@@ -41,7 +41,7 @@ def build():
     py_files = sorted(SRC.glob('*.py'), key=get_sort_key)
     
     # 修改：页脚样式改为 made by chanvel & 时间
-    footer = [f"\n\nmade by chanvel & {NOW}"]
+    footer = [f"\n---\nmade by chanvel & {NOW}"]
     
     # 1. 详情页 (python/README.md)
     sub_body = [f"[源代码汇总](../README.md)\n"]
