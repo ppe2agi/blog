@@ -2,19 +2,38 @@
 ---
 @import "{{ site.theme }}";
 
-// 缩小顶部蓝绿横幅的高度
+// 1. 缩小顶部横幅高度并强制内容居中
 .page-header {
-  padding: 1.5rem 2rem; 
+  padding: 1.5rem 2rem !important;
+  text-align: center; // 确保内部所有文字水平居中
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-// 调整标题和描述的大小
-.project-name { font-size: 2.2rem; margin-bottom: 0.2rem; }
-.project-tagline { font-size: 0.9rem; opacity: 0.8; }
+// 2. 修复标题偏移
+.project-name {
+  font-size: 2.2rem !important;
+  margin: 0 !important;      // 消除可能导致偏移的边距
+  padding: 0 !important;
+  width: 100%;               // 确保占据全宽以实现真正的居中
+  text-align: center;
+}
 
-// 让正文中的 --- 横线变细变淡
+// 3. 修复描述文字偏移
+.project-tagline {
+  font-size: 0.9rem !important;
+  margin: 0.2rem 0 0 0 !important;
+  opacity: 0.8;
+  width: 100%;
+  text-align: center;
+}
+
+// 4. 让正文横线变细
 hr {
-  height: 1px;
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 1.5rem 0;
+  height: 1px !important;
+  border: none !important;
+  border-top: 1px solid #eee !important;
+  margin: 1.5rem 0 !important;
 }
