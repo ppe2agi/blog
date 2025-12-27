@@ -9,9 +9,16 @@ SRC, ROOT_MD, SRC_MD = Path('python'), Path('README.md'), Path('python/README.md
 CN_MAP = {c: i for i, c in enumerate('一二三四五六七八九十', 1)}
 
 def get_sort_key(p):
-    """智能排序：支持数字和中文序号，不改动原始文件名"""
-    m = re.match(r'^(\d+|[一二三四五六七八九十])', p.stem)
-    if not m: return (1, p.stem)
+    name = p.stem
+    m = re.match(r'^(\d+|[一二三四五六七八九十])', name)
+    
+    # 元组第一位决定大类：
+    # -1: 包含“序”的文件 (最高)
+    #  0: 带数字/中文序号的文件 (中等)
+    #  1: 普通文件 (最低)    
+    if "序" in name: return (-1, name)
+    if not m: return (1, name)
+    
     val = m.group(1)
     return (0, int(val) if val.isdigit() else CN_MAP.get(val, 99))
 
