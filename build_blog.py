@@ -22,30 +22,25 @@ def process_py(p):
             content.append(f"\n```python\n" + "\n".join(code_acc).strip() + "\n```\n")
         code_acc.clear()
 
+    # 使用 <pre> 开启预格式化，确保所有空格和换行与源码一致
+    content.append('<pre style="font-family: inherit; background: transparent; border: none; padding: 0; white-space: pre-wrap;">')
+    
     for line in p.read_text(encoding='utf-8').splitlines():
         m = re.match(r'^\s*#\s?(.*)', line)
         if m:
             flush()
+            # 直接提取 # 后面的原始文本，不做任何 strip 或重排
             text = m.group(1)
-            stripped = text.lstrip()
-            
-            # 标题行：匹配序号 (如 1. / 1.1 / 1、 / 一、)
-            h = re.match(r'^(\d+[\.、]|\d+(\.\d+)+|[\u4e00-\u9fa5]+[、])', stripped)
-            if h:
-                pre = h.group(1).rstrip()
-                rest = stripped[h.end():].lstrip()
-                # 核心逻辑：序号后固定补 2 个全角空格，强行把文字推到第 3 位对齐线
-                content.append(f"{pre}&emsp;&emsp;{rest}<br>")
-            else:
-                # 正文行：强制首行缩进 2 字符位
-                content.append(f"&emsp;&emsp;{stripped}<br>" if stripped else "<br>")
+            content.append(f"{text}")
         
         elif not line.strip():
-            flush(); content.append("<br>")
+            flush()
+            content.append("") # 保持空行
         else:
             code_acc.append(line)
             
     flush()
+    content.append('</pre>')
     return "\n".join(content)
 
 def build():
