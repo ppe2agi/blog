@@ -28,17 +28,18 @@ def process_py(p):
             flush()
             text = m.group(1)
             stripped = text.lstrip()
-            # 1. 分隔线：前后加空行防止标题加粗
+            # 1. 分割线处理：前后空行防止标题加粗
             if re.match(r'^[=\-]{3,}$', stripped):
                 content.append("\n---\n")
-            # 2. 标题行：顶格，序号后补1个全角空格，实现文字与正文首行对齐
+            # 2. 标题/序号行：缩进1个全角，序号后补1个半角，使文字对齐正文
             elif re.match(r'^(\d+[\.、\s]|\d+(\.\d+)+|[\u4e00-\u9fa5]+[、]|【|-|\*)', stripped):
                 h = re.match(r'^(\d+[\.、]|\d+(\.\d+)+|[\u4e00-\u9fa5]+[、])', stripped)
                 if h:
                     pre, rest = h.group(1).rstrip(), stripped[h.end():].lstrip()
-                    content.append(f"{pre}　{rest}<br>") # 补1个全角空格
+                    # 　(全角) + pre + (半角) 约等于 2个全角宽度
+                    content.append(f"　{pre} {rest}<br>") 
                 else:
-                    content.append(f"{stripped}<br>")
+                    content.append(f"　　{stripped}<br>")
             # 3. 正文行：强制首行缩进 2 字符 (2个全角空格)
             else:
                 content.append(f"　　{stripped}<br>" if stripped else "<br>")
