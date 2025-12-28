@@ -30,24 +30,28 @@ def process_py(p):
         code_acc.clear()
 
     for line in p.read_text(encoding='utf-8').splitlines():
-        # 匹配注释行，保留原始空格
         m = re.match(r'^\s*#\s?(.*)', line)
         if m:
             flush()
             text = m.group(1)
+            stripped_text = text.lstrip()
             
-            # 1. 处理分隔符：转为 MD 细线，并在前后加空行防止上一行文字变粗
-            if re.match(r'^[=\-]{3,}$', text.strip()):
+            # 1. 处理细线：转为 MD 分隔符，前后加换行防止标题化
+            if re.match(r'^[=\-]{3,}$', stripped_text):
                 content.append("\n---\n")
             
-            # 2. 处理文字行：实现首行缩进 + 强制换行
+            # 2. 判断是否为“小标题”或“列表项”（不缩进）
+            # 匹配规则：以数字序号(1.)、列表符(-)、或中文括号【开头
+            elif re.match(r'^(\d+\.|-|\*|【)', stripped_text):
+                content.append(f"{text}<br>")
+            
+            # 3. 普通正文文本（执行首行缩进 2 字符）
             else:
                 if not text.strip():
                     content.append("<br>")
                 else:
-                    # 在每一行注释前面手动加上两个全角空格（约等于 2 个汉字宽度）
-                    # 末尾加 <br> 确保 GitHub 不合并行
-                    content.append(f"　　{text}<br>") 
+                    # 使用 &nbsp; 或全角空格实现缩进
+                    content.append(f"&nbsp;&nbsp;{text}<br>") 
         
         elif not line.strip():
             flush()
