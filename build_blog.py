@@ -30,25 +30,27 @@ def process_py(p):
         code_acc.clear()
 
     for line in p.read_text(encoding='utf-8').splitlines():
-        # 匹配 # 及其后面的所有内容（包含空格）
+        # 1. 匹配注释行，保留原始空格 (不要使用 .strip())
         m = re.match(r'^\s*#\s?(.*)', line)
         if m:
             flush()
-            comment_text = m.group(1)
-            # 处理逻辑：
-            # 1. 如果是空注释行，添加空行
-            # 2. 否则添加内容，并在末尾加 <br> 强制换行，确保排版一致
-            if not comment_text.strip():
-                content.append("")
+            text = m.group(1)
+            
+            # 2. 如果是全是等号或减号的分隔线，转换成 Markdown 的横线
+            if re.match(r'^[=\-]{5,}$', text.strip()):
+                content.append("\n---\n")
+            # 3. 如果是普通注释，在末尾强制添加两个空格 + 换行
+            # GitHub 只有看到行尾有两个空格才会真的换行
             else:
-                # 使用 <br> 是在 GitHub 上保持“所见即所得”最稳妥的方式
-                content.append(f"{comment_text}  ") 
+                content.append(f"{text}  ") 
+        
+        # 4. 如果是代码中的纯空行
         elif not line.strip():
             flush()
-            if content and content[-1] != "":
-                content.append("")
+            content.append("\n") 
         else:
             code_acc.append(line)
+            
     flush()
     return "\n".join(content)
 
