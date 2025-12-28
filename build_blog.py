@@ -23,28 +23,22 @@ def get_sort_key(p):
     return (0, int(val) if val.isdigit() else CN_MAP.get(val, 99))
 
 def process_py(p):
-    """提取注释与代码块"""
     content, code_acc = [], []
     def flush():
         if code_acc and any(l.strip() for l in code_acc):
-            # 修正：在代码块前后强制添加空行
-            content.append("") 
-            content.append("```python")
-            content.extend(code_acc)
-            content.append("```")
-            content.append("")
+            content.append(f"\n```python\n" + "\n".join(code_acc) + "\n```\n")
         code_acc.clear()
 
-    for line in p.read_text(encoding='utf-8', errors='replace').splitlines():
+    for line in p.read_text(encoding='utf-8').splitlines():
         m = re.match(r'^\s*#\s?(.*)', line)
         if m:
             flush()
-            # 修正：确保注释行也是独立的段落
-            content.append(m.group(1).strip())
-            content.append("") 
+            # 核心修改：直接添加内容，不强制追加空行 ""
+            content.append(m.group(1).rstrip())
         elif not line.strip():
             flush()
-            content.append("")
+            # 仅在段落间保留一个空行
+            if content and content[-1] != "": content.append("")
         else:
             code_acc.append(line)
     flush()
