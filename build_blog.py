@@ -34,6 +34,8 @@ def to_full_width(text):
     }
     return "".join(mapping.get(c, c) for c in text)
 
+import re
+
 def process_py(p):
     content, code_acc = [], []
     def flush():
@@ -42,30 +44,30 @@ def process_py(p):
         code_acc.clear()
 
     for line in p.read_text(encoding='utf-8').splitlines():
+        # 捕获注释行，忽略 # 前后的原始空格
         m = re.match(r'^\s*#\s?(.*)', line)
         if m:
             flush()
             text = m.group(1)
             stripped = text.lstrip()
             
-            # 1. 细线处理：前后加空行，防止标题被加粗成 H2
+            # 1. 分隔线：转为 MD 细线，前后加空行防止文字变粗
             if re.match(r'^[=\-]{3,}$', stripped):
                 content.append("\n---\n")
             
-            # 2. 识别序号行（顶格显示）
-            # 匹配 1. / 1、 / 1.1 / 一、 / 【
-            elif re.match(r'^(\d+[\.、\s]|\d+\.\d+|[\u4e00-\u9fa5]+[、]|【|-|\*)', stripped):
-                # 标题行不加缩进，直接输出
+            # 2. 标题/序号行：匹配 1. / 1、 / 1.1 / 一、 / 【
+            # 这些行强制顶格，不加缩进
+            elif re.match(r'^(\d+[\.、\s]|\d+(\.\d+)+|[\u4e00-\u9fa5]+[、]|【|-|\*)', stripped):
                 content.append(f"{stripped}<br>")
             
-            # 3. 正文文本：增加缩进深度
+            # 3. 正文行：精准缩进 2 个中文字符位
             else:
                 if not text.strip():
                     content.append("<br>")
                 else:
-                    # 使用 2个全角空格(　) + 2个半角空格(&nbsp;) 
-                    # 这样能拉开正文与序号的间距，更有层次感
-                    content.append(f"　　&nbsp;&nbsp;{stripped}<br>") 
+                    # &emsp; 是最稳固的 1:1 汉字宽度占位符
+                    # 这样正文会从第 3 个中文字符的位置开始对齐
+                    content.append(f"&emsp;&emsp;{stripped}<br>") 
         
         elif not line.strip():
             flush()
