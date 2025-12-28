@@ -22,11 +22,22 @@ def get_sort_key(p):
     val = m.group(1)
     return (0, int(val) if val.isdigit() else CN_MAP.get(val, 99))
 
+import re
+
+def to_full_width(text):
+    """将字符串中的半角数字、点、顿号转换为全角"""
+    # 半角转全角的映射表
+    mapping = {
+        '0': '０', '1': '１', '2': '２', '3': '３', '4': '４',
+        '5': '５', '6': '６', '7': '７', '8': '８', '9': '９',
+        '.': '．', ',': '，', ':': '：', ' ': '　'
+    }
+    return "".join(mapping.get(c, c) for c in text)
+
 def process_py(p):
     content, code_acc = [], []
     def flush():
         if code_acc and any(l.strip() for l in code_acc):
-            # 确保代码块前后有空行
             content.append(f"\n```python\n" + "\n".join(code_acc).strip() + "\n```\n")
         code_acc.clear()
 
@@ -37,31 +48,36 @@ def process_py(p):
             text = m.group(1)
             stripped = text.lstrip()
             
-            # 1. 细线处理：前后加空行，彻底防止标题加粗
+            # 1. 细线处理：前后加空行防止标题加粗
             if re.match(r'^[=\-]{3,}$', stripped):
                 content.append("\n---\n")
             
-            # 2. 识别序号/标题行：不缩进，且上下保留空行确保独立
+            # 2. 识别并转换标题行：将 1.1 或 1、 转换为全角 １．１ 或 １、
             elif re.match(r'^(\d+[\.、\s]|[\u4e00-\u9fa5]+[、]|【|-|\*)', stripped):
-                # \n{text}\n 确保它是独立的行，不会和正文挤在一起
-                content.append(f"\n{stripped}\n")
+                # 只对行首的序号部分进行全角转换
+                header_match = re.match(r'^(\d+[\.、\s]*)', stripped)
+                if header_match:
+                    prefix = to_full_width(header_match.group(1))
+                    rest = stripped[header_match.end():]
+                    content.append(f"\n{prefix}{rest}<br>")
+                else:
+                    content.append(f"\n{stripped}<br>")
             
-            # 3. 正文文本：精准缩进 2 字符
+            # 3. 正文文本：使用 2 个全角空格实现完美对齐
             else:
                 if not text.strip():
-                    content.append("") # 纯空行
+                    content.append("<br>")
                 else:
-                    # 使用 2 个全角空格实现完美对齐。末尾不加 <br>，依赖 MD 的换行
-                    content.append(f"　　{stripped}") 
+                    # 此时标题占 2 个位，正文缩进 2 个全角空格，视觉上完美垂直对齐
+                    content.append(f"　　{stripped}<br>") 
         
         elif not line.strip():
             flush()
-            content.append("") 
+            content.append("<br>") 
         else:
             code_acc.append(line)
             
     flush()
-    # 最终合并时，确保段落之间逻辑清晰
     return "\n".join(content)
 
 def build():
